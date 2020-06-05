@@ -1,0 +1,5 @@
+---
+
+- name: pull image
+  shell: docker pull oddrationale/docker-shadowsocks
+  become: yes

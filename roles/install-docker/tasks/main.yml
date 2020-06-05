@@ -1,0 +1,8 @@
+---
+
+# Docker install
+
+- include: install-redhat.yml
+  when: ansible_os_family == 'RedHat'
+- include: install-ubuntu-14.yml
+  when: ansible_os_family == 'Debian'

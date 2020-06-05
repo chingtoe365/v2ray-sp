@@ -1,0 +1,28 @@
+---
+
+# Docker install for Ubuntu-14.0
+
+- name: update add-apt-repository
+  shell: apt update
+  
+- name: Install docker - dependencies
+  apt: name={{item}} state=installed
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Install docker - curl
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+- name: Install docker - finger print
+  shell: apt-key fingerprint OEBFCD88 
+
+- name: Install docker - add repo
+  shell: sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+- name: apt update
+  apt: update_cache=yes
+
+- apt: name=docker-ce state=present

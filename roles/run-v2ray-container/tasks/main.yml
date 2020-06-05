@@ -1,0 +1,19 @@
+---
+
+# Docker install
+- name: mkdir
+  shell: mkdir /etc/v2ray
+  
+- name: copy config file
+  template:
+    src=templates/config.j2
+    dest={{v2ray_dir}}/config.json
+    owner="{{user}}"
+    group="{{user}}"
+    mode=0644
+
+- name: run image
+  shell: docker run -d --name v2ray -v /etc/v2ray:/etc/v2ray --restart always -p {{v2ray_port}}:{{v2ray_port}} v2ray/official v2ray -config={{v2ray_dir}}/config.json
+  become: yes
+
+  

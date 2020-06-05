@@ -1,0 +1,6 @@
+---
+
+# Docker install
+
+- name: remove host from know-host
+  shell: ssh-keygen -R {{inventory_hostname}}

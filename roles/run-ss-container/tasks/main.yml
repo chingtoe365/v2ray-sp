@@ -1,0 +1,6 @@
+---
+
+# Docker install
+- name: run image
+  shell: docker run -d --restart always -p {{ss_port}}:{{ss_port}} oddrationale/docker-shadowsocks -s 0.0.0.0 -p {{ss_port}} -k {{ss_password}} -m {{ss_encrypt_method}}
+  become: yes

@@ -1,0 +1,32 @@
+{
+  "inbounds": [{
+    "port": {{v2ray_port}},
+    "protocol": "vmess",
+    "settings": {
+      "clients": [
+        {
+          "id": "{{v2ray_uuid}}",
+          "level": 1,
+          "alterId": {{v2ray_altid}}
+        }
+      ]
+    }
+  }],
+  "outbounds": [{
+    "protocol": "freedom",
+    "settings": {}
+  },{
+    "protocol": "blackhole",
+    "settings": {},
+    "tag": "blocked"
+  }],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "blocked"
+      }
+    ]
+  }
+}

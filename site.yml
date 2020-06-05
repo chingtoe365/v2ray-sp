@@ -1,0 +1,37 @@
+---
+# - name: Remove and reset elastic IP from known-host 
+#   connection: local
+#   become: yes
+#   roles:
+#       - remove-host
+# USAGE:
+# ---------------------------------
+# ansible-playbook -i hosts site.yml -e "vpn_type=shadowsocks user=root instance=singaporevpn" -v
+# ansible-playbook -i hosts site.yml -e "vpn_type=v2ray user=root instance=xxxx v2ray_port=xxxx v2ray_uuid=xxxx v2ray_altid=xxxx" -v
+# ---------------------------------
+      
+- name: Install docker, get shadowsocks image and run it
+  hosts: "{{instance}}"
+  gather_facts: true
+  become: yes
+  user: "{{user}}"
+  pre_tasks:
+  - name: check if docker is installed
+    shell: dpkg -l | grep docker
+    register: docker_check
+    failed_when: "docker_check.rc == 2 or docker_check.rc == 3"
+    when: ansible_os_family == 'Debian'
+  # - name: check if docker is installed
+  #   shell: rpm -qa | grep docker
+  #   register: docker_check
+  #   failed_when: "docker_check.rc == 2 or docker_check.rc == 3"
+  #   when: ansible_os_family == 'RedHat'
+  - name: debug
+    debug: "OS type of instance: {{ansible_os_family}}"
+  roles:
+    # - {role: install-docker, when: docker_check.stdout == ''}
+    - {role: install-docker, when: docker_check.stdout == ''}
+    - {role: pull-ss-image, when: vpn_type == 'shadowsocks'}
+    - {role: run-ss-container, when: vpn_type == 'shadowsocks'}
+    - {role: pull-v2ray-image, when: vpn_type == 'v2ray'}
+    - {role: run-v2ray-container, when: vpn_type == 'v2ray'}

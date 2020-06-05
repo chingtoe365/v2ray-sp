@@ -1,0 +1,5 @@
+---
+
+- name: pull image
+  shell: docker pull v2ray/official
+  become: yes

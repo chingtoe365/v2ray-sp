@@ -1,0 +1,16 @@
+---
+
+- name: Install docker, get shadowsocks image and run it
+  hosts: "{{instance}}"
+  gather_facts: true
+  become: yes
+  user: "{{user}}"
+  pre_tasks:
+  - name: check if docker is installed
+    shell: dpkg -l | grep docker
+    register: docker_check
+    failed_when: "docker_check.rc == 2 or docker_check.rc == 3"
+  roles:
+    - {role: install-docker, when: docker_check.stdout == ''}
+    - pull-ss-image
+    - run-ss-container
